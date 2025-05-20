@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- ✅ পেজ এনকোডিং এবং রেসপনসিভ সেটআপ -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium YouTube Downloader | HD Videos & MP3</title>
+    <!-- ✅ কাস্টম CSS যুক্ত করা হয়েছে -->
+    <link rel="stylesheet" href="asYtDlMainSt.css">
+    <!-- ✅ Font Awesome ব্যবহার করা হয়েছে আইকনের জন্য -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- ✅ JavaScript ফাইল ডিফার মোডে লোড করা হয়েছে -->
+    <script src="asYtDlMainScript.js" defer></script>
+</head>
+<body>
+    <!-- ✅ হেডার সেকশন এবং ন্যাভিগেশন -->
+    <header>
+        <div class="navbar">
+            <div class="logo">
+                <i class="fab fa-youtube"></i>
+                <span>YT Premium</span>
+            </div>
+            <div class="nav-links">
+                <a href="#">Home</a>
+                <a href="#">About</a>
+                <a href="#">FAQ</a>
+                <a href="#">Contact</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ✅ ক্যাটাগরি বোতাম গুলো -->
+    <div class="categories">
+        <div class="category-container">
+            <button class="category-btn active">All</button>
+            <button class="category-btn">Music</button>
+            <button class="category-btn">Videos</button>
+            <button class="category-btn">Playlists</button>
+            <button class="category-btn">Shorts</button>
+            <button class="category-btn">4K UHD</button>
+            <button class="category-btn">MP3</button>
+            <button class="category-btn">MP4</button>
+        </div>
+    </div>
+
+    <!-- ✅ মেইন কন্টেন্ট এরিয়া -->
+    <div class="container">
+        <div class="download-card">
+            <!-- ✅ হেডিং ও ডিসক্রিপশন -->
+            <h1 class="card-title">Download YouTube Videos & MP3</h1>
+            <p class="card-description">Paste your YouTube link below to download in HD quality with fast speed</p>
+
+            <!-- ✅ ইউআরএল ইনপুট এবং ডাউনলোড বোতাম -->
+            <div class="input-group">
+                <input type="text" id="youtube-url" placeholder="Paste YouTube video URL here...">
+                <!--
+                    ✅ এখানে ডাউনলোড বাটনের জন্য id "download-btn" দেওয়া হয়েছে।
+                    এটি জাভাস্ক্রিপ্টে সিলেক্ট করার জন্য প্রয়োজন।
+                    অন্য কোথাও id ব্যবহার করবেন না, class দিয়ে থাকুন।
+                -->
+                <button id="download-btn"><i class="fas fa-download"></i> Download</button>
+            </div>
+
+            <!-- ✅ রেজাল্ট দেখানোর সেকশন -->
+            <div id="result-container" class="result-container" style="display:none;">
+                <!--
+                    ⚠️ শুরুতে hidden রাখলাম style="display:none;" কারণ ডাউনলোড বোতাম ক্লিক করলে এখানে তথ্য আসবে
+                    এবং দেখানো হবে। ফলে খালি অবস্থায় UI খারাপ দেখাবে না।
+                -->
+
+                <!-- ✅ ভিডিওর তথ্য -->
+                <div class="video-info">
+                    <!--
+                        ✅ এখানে id 'video-thumbnail' দরকার জাভাস্ক্রিপ্ট থেকে থাম্বনেইল ছবি সেট করার জন্য।
+                    -->
+                    <img id="video-thumbnail" class="thumbnail" src="" alt="Video Thumbnail">
+
+                    <div class="video-details">
+                        <!--
+                            ✅ ভিডিওর শিরোনাম দেখানোর জন্য id 'video-title' থাকা আবশ্যক।
+                            এই আইডি সেট করার সময় যে এরর হচ্ছিলো, সেটার কারণ এখানে এই এলিমেন্টটি না থাকা।
+                        -->
+                        <h2 id="video-title" class="video-title">Video Title Here</h2>
+
+                        <div class="video-meta">
+                            <span><i class="fas fa-clock"></i> <span id="video-duration">10:30</span></span>
+                            <span><i class="fas fa-eye"></i> <span id="video-views">1.5M views</span></span>
+                            <span><i class="fas fa-calendar"></i> <span id="video-publish-date">2023-10-15</span></span>
+                        </div>
+
+                        <!--
+                            ✅ ভিডিওর বর্ণনা দেখানোর জন্য id 'video-description' রাখা হয়েছে,
+                            যা জাভাস্ক্রিপ্ট থেকে আপডেট করা হয়।
+                        -->
+                        <p id="video-description">Video description will appear here...</p>
+                    </div>
+                </div>
+
+                <!-- ✅ ভিডিও এবং অডিও ডাউনলোড অপশন ট্যাব -->
+                <div class="download-options">
+                    <div class="option-tabs">
+                        <button class="tab-btn active" data-tab="video">Video</button>
+                        <button class="tab-btn" data-tab="audio">Audio</button>
+                    </div>
+
+                    <!-- ✅ ভিডিও ফরম্যাট লিস্ট -->
+                    <div id="video-formats" class="format-grid">
+                        <!-- 1080p -->
+                        <div class="format-card">
+                            <div class="format-header">
+                                <span class="format-type">MP4</span>
+                                <span class="format-quality">1080p</span>
+                            </div>
+                            <div class="format-details">
+                                <p>1920x1080 • 60fps</p>
+                                <p>File size: ~120MB</p>
+                            </div>
+                            <button class="download-btn">Download</button>
+                        </div>
+
+                        <!-- 720p -->
+                        <div class="format-card">
+                            <div class="format-header">
+                                <span class="format-type">MP4</span>
+                                <span class="format-quality">720p</span>
+                            </div>
+                            <div class="format-details">
+                                <p>1280x720 • 30fps</p>
+                                <p>File size: ~80MB</p>
+                            </div>
+                            <button class="download-btn">Download</button>
+                        </div>
+
+                        <!-- 480p -->
+                        <div class="format-card">
+                            <div class="format-header">
+                                <span class="format-type">MP4</span>
+                                <span class="format-quality">480p</span>
+                            </div>
+                            <div class="format-details">
+                                <p>854x480 • 30fps</p>
+                                <p>File size: ~50MB</p>
+                            </div>
+                            <button class="download-btn">Download</button>
+                        </div>
+
+                        <!-- 360p -->
+                        <div class="format-card">
+                            <div class="format-header">
+                                <span class="format-type">MP4</span>
+                                <span class="format-quality">360p</span>
+                            </div>
+                            <div class="format-details">
+                                <p>640x360 • 30fps</p>
+                                <p>File size: ~30MB</p>
+                            </div>
+                            <button class="download-btn">Download</button>
+                        </div>
+                    </div>
+
+                    <!-- ✅ অডিও ফরম্যাট লিস্ট -->
+                    <div id="audio-formats" class="format-grid" style="display: none;">
+                        <!-- 320kbps -->
+                        <div class="format-card">
+                            <div class="format-header">
+                                <span class="format-type">MP3</span>
+                                <span class="format-quality">320kbps</span>
+                            </div>
+                            <div class="format-details">
+                                <p>High Quality Audio</p>
+                                <p>File size: ~8MB</p>
+                            </div>
+                            <button class="download-btn">Download</button>
+                        </div>
+
+                        <!-- 256kbps -->
+                        <div class="format-card">
+                            <div class="format-header">
+                                <span class="format-type">MP3</span>
+                                <span class="format-quality">256kbps</span>
+                            </div>
+                            <div class="format-details">
+                                <p>Good Quality Audio</p>
+                                <p>File size: ~6MB</p>
+                            </div>
+                            <button class="download-btn">Download</button>
+                        </div>
+
+                        <!-- 128kbps -->
+                        <div class="format-card">
+                            <div class="format-header">
+                                <span class="format-type">MP3</span>
+                                <span class="format-quality">128kbps</span>
+                            </div>
+                            <div class="format-details">
+                                <p>Standard Quality Audio</p>
+                                <p>File size: ~4MB</p>
+                            </div>
+                            <button class="download-btn">Download</button>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- #result-container শেষ -->
+        </div> <!-- .download-card শেষ -->
+    </div> <!-- .container শেষ -->
+
+    <!-- ✅ ফুটার সেকশন -->
+    <footer>
+        <div class="footer-container">
+
+            <!-- কোম্পানির তথ্য -->
+            <div class="footer-about">
+                <div class="footer-logo">
+                    <i class="fab fa-youtube"></i> YT Premium
+                </div>
+                <p>The fastest YouTube video downloader with high quality MP4 and MP3 formats.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+
+            <!-- কুইক লিংক -->
+            <div class="footer-links">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Features</a></li>
+                    <li><a href="#">How It Works</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+
+            <!-- ফরম্যাট লিংক -->
+            <div class="footer-links">
+                <h3>Formats</h3>
+                <ul>
+                    <li><a href="#">MP4 Download</a></li>
+                    <li><a href="#">MP3 Download</a></li>
+                    <li><a href="#">4K Videos</a></li>
+                    <li><a href="#">YouTube Shorts</a></li>
+                </ul>
+            </div>
+
+            <!-- লিগ্যাল লিংক -->
+            <div class="footer-links">
+                <h3>Legal</h3>
+                <ul>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">DMCA</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- কপিরাইট -->
+        <div class="copyright">
+            &copy; 2024 YT Premium Downloader. All rights reserved.
+        </div>
+    </footer>
+</body>
+</html>
