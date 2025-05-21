@@ -48,14 +48,19 @@ document.getElementById('download-btn').addEventListener('click', async function
         // ✅ API থেকে পাওয়া JSON ডেটা নেয়া হচ্ছে
         const data = await response.json();
 
-        console.log(data); // ✅ ডেভেলপার কনসোলে ডেটা দেখা যাবে
+        // console.log(data); // ✅ ডেভেলপার কনসোলে ডেটা দেখা যাবে
 
         // 📺 UI তে ভিডিওর শিরোনাম, বিবরণ ও থাম্বনেইল বসানো হচ্ছে
         document.getElementById('video-title').innerText = data.title || 'No title found';
         document.getElementById('video-description').innerText = data.description || 'No description available';
 
         // থাম্বনেইল URL না পেলে placeholder দেখাবে
-        document.getElementById('video-thumbnail').src = data.thumbnail || 'https://dummyimage.com/320x180/cccccc/000000.png&text=No+Image';
+        let thumbnailUrl = 'https://dummyimage.com/320x180/cccccc/000000.png?text=No+Image';
+        if (Array.isArray(data.thumbnail) && data.thumbnail.length > 0) {
+        // পছন্দসই সাইজ বেছে নিতে চাইলে index পরিবর্তন করো
+        thumbnailUrl = data.thumbnail[1]?.url || data.thumbnail[0]?.url || thumbnailUrl;
+        };
+        document.getElementById('video-thumbnail').src = thumbnailUrl;
 
         // 🕒 ভিডিওর সময়কাল, ভিউ সংখ্যা ও প্রকাশের তারিখ দেখানো হচ্ছে
         document.getElementById('video-views').innerText = data.views ? `Views: ${data.views.toLocaleString()}` : 'Views: No data';
@@ -76,9 +81,6 @@ document.getElementById('download-btn').addEventListener('click', async function
 
                 // 🎞️ ভিডিও ফরম্যাট কার্ড তৈরি
                 if (format.mimeType.startsWith('video')) {
-                    // ⚠️ নিশ্চিত করুন format.url আসছে একটি স্ট্রিং হিসেবে, অবজেক্ট নয়
-                    // console.log('Video format url:', format.url);
-
                     card.innerHTML = `
                         <div class="format-header">
                             <span class="format-type">${format.qualityLabel || 'Video'}</span>
@@ -88,7 +90,7 @@ document.getElementById('download-btn').addEventListener('click', async function
                             Bitrate: ${format.bitrate || 'N/A'}<br>
                             FPS: ${format.fps || 'N/A'}
                         </div>
-                        <button class="download-btn" onclick="window.open('${format.url}', '_blank')">Download</button>
+                        <button class="download-btn" onclick="window.open('${format.url}', '_blank', 'noopener,noreferrer')">Download</button>
                     `;
                     videoFormatsContainer.appendChild(card);
                 } 
@@ -102,7 +104,7 @@ document.getElementById('download-btn').addEventListener('click', async function
                         <div class="format-details">
                             Bitrate: ${format.bitrate || 'N/A'}
                         </div>
-                        <button class="download-btn" onclick="window.open('${format.url}', '_blank')">Download</button>
+                        <button class="download-btn" onclick="window.open('${format.url}', '_blank', 'noopener,noreferrer')">Download</button>
                     `;
                     audioFormatsContainer.appendChild(card);
                 }
@@ -116,16 +118,11 @@ document.getElementById('download-btn').addEventListener('click', async function
         document.getElementById('audio-formats').style.display = 'none';
 
     } catch (error) {
-        // ❌ কোনো এরর হলে তা কনসোলে দেখানো ও ইউজারকে জানানো হবে
         console.error('Error:', error);
         alert('Failed to fetch video info.');
         document.getElementById('video-title').innerText = 'Error loading video info';
         document.getElementById('video-description').innerText = '';
-
-        // ❌ এরর হলে placeholder ইমেজ দেখানো
         document.getElementById('video-thumbnail').src = 'https://dummyimage.com/320x180/cccccc/ff0000.png&text=Error';
-
-        // 🧹 ভুল ডেটা থাকলে তা মুছে ফেলা হচ্ছে
         document.getElementById('video-views').innerText = '';
         document.getElementById('video-duration').innerText = '';
         document.getElementById('video-publish-date').innerText = '';
@@ -139,13 +136,8 @@ const tabButtons = document.querySelectorAll('.tab-btn');
 
 tabButtons.forEach(button => {
     button.addEventListener('click', function () {
-        // 🔄 সকল বাটন থেকে active ক্লাস সরানো হচ্ছে
         tabButtons.forEach(btn => btn.classList.remove('active'));
-
-        // ✅ ক্লিক করা বাটনকে active করা হচ্ছে
         this.classList.add('active');
-
-        // 👁️ শুধু নির্বাচিত ট্যাব দেখানো হবে
         document.getElementById('video-formats').style.display = 'none';
         document.getElementById('audio-formats').style.display = 'none';
 
@@ -159,12 +151,27 @@ const categoryButtons = document.querySelectorAll('.category-btn');
 
 categoryButtons.forEach(button => {
     button.addEventListener('click', function () {
-        // 🔄 সব ক্যাটাগরি বাটন থেকে active ক্লাস সরানো
         categoryButtons.forEach(btn => btn.classList.remove('active'));
-
-        // ✅ ক্লিক করা ক্যাটাগরিকে active করা
         this.classList.add('active');
-
-        // 🧠 (অপশনাল) এখানে ক্যাটাগরি ফিল্টারিং ফাংশনালিটি যুক্ত করা যেতে পারে
     });
+});
+
+// 🆕 ইউজার ইউটিউব লিংক পেস্ট করলে অটো প্রসেসিং ও দুটি লিংক নতুন ট্যাবে ওপেন
+document.getElementById('youtube-url').addEventListener('paste', function (e) {
+    setTimeout(() => {
+        const pastedUrl = e.target.value;
+
+        if (pastedUrl) {
+            // ✅ সাবমিট বাটন ট্রিগার করা (অটোমেটিক প্রসেসিং)
+            document.getElementById('download-btn').click();
+
+            // 🌐 ইউজারের ইউটিউব লিংক নতুন ট্যাবে ওপেন
+            //    '_blank' → নতুন ট্যাব, 'noopener,noreferrer' → নিরাপত্তা ও প্রাইভেসি।
+            // window.open(pastedUrl, '_blank', 'noopener,noreferrer');
+
+            // 🌐 আপনার কাস্টম লিংকও নতুন ট্যাবে ওপেন হবে।
+            //    '_blank' → নতুন ট্যাব, 'noopener,noreferrer' → নিরাপত্তা ও প্রাইভেসি।
+            window.open('https://newspaperreports.com', '_blank', 'noopener,noreferrer'); // ← আপনার কাস্টম লিংক এখানে দিন
+        }
+    }, 100); // ✅ কিছু সময় দেরি দিতে হয় যাতে পেস্ট হয়ে যায়
 });
