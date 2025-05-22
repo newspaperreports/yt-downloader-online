@@ -48,7 +48,7 @@ document.getElementById('download-btn').addEventListener('click', async function
         // ✅ API থেকে পাওয়া JSON ডেটা নেয়া হচ্ছে
         const data = await response.json();
 
-        // console.log(data); // ✅ ডেভেলপার কনসোলে ডেটা দেখা যাবে
+        console.log(data); // ✅ ডেভেলপার কনসোলে ডেটা দেখা যাবে
 
         // 📺 UI তে ভিডিওর শিরোনাম, বিবরণ ও থাম্বনেইল বসানো হচ্ছে
         document.getElementById('video-title').innerText = data.title || 'No title found';
