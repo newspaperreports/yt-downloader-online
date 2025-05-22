@@ -10,8 +10,8 @@
     <!-- AS - Life Media Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- AS - Life Media Custom CSS -->
-     <link rel="stylesheet" href="asMediaBkUpAds.css">
-    <link rel="stylesheet" href="asYtDlMainSt.css">
+    <link rel="stylesheet" href="asMediaBkUpAds.css" type="text/css">
+    <link rel="stylesheet" href="asYtDlMainSt.css" type="text/css">
     <!-- AS - Life Media Custom Script -->
     <script src="asMediaBkUpAds.js"></script>
     <script src="asYtDlMainScript.js" defer></script>
@@ -64,6 +64,40 @@
             <button class="category-btn">MP4</button>
         </div>
     </div>
+
+    <!-- St Newspaper Reports Demo Float -->
+    <div class="asNpr_pf_area asNpr_provider_float_area">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            const link = document.createElement("link");
+            link.rel = "stylesheet";
+            link.href = "https://cdn.jsdelivr.net/gh/newspaperreports/host-copyright-style/asNprProviderFloatSt.css";
+            document.head.appendChild(link);
+        </script>
+        <script>
+            $(function() {
+                $('.asNpr_pf_hide').on('click', function() {
+                    $('.asNpr_pf_area').fadeOut(170);
+                });
+            });
+        </script>
+        <div class="asNpr_pf_ct">
+            <div class="asNpr_pf_info">
+                <span class="asNpr_pf_hide">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512" width="18" height="18" fill="currentColor">
+                        <path d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.19 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.19 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"/>
+                    </svg>
+                </span>
+                <div class="asNpr_pf_logo"></div>
+                <h3 class="asNpr_pf_headline">Newspaper Reports</h3>
+                <p class="asNpr_pf_excerpt">Best Free and Premium Global News.</p>
+                <a href="https://www.newspaperreports.com" target="_blank" rel="sponsored" title="Download Now" class="asNpr_pf_ok_btn">
+                    Download Now
+                </a>
+            </div>
+        </div>
+    </div>
+    <!-- End Newspaper Reports Demo Float -->
 
     <!-- Main Content Area -->
     <div class="container">
@@ -254,9 +288,9 @@
                 </div>
                 <p>The fastest YouTube video downloader with high quality MP4 and MP3 formats.</p>
                 <div class="social-icons">
-                    <a href="#"><i class="fab fa-facebook"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.facebook.com/newspaperreports" target="_blank"><i class="fab fa-facebook"></i></a>
+                    <a href="https://x.com/newspaperreport" target="_blank"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.instagram.com/newspaperreports" target="_blank"><i class="fab fa-instagram"></i></a>
                 </div>
             </div>
 
@@ -264,7 +298,7 @@
             <div class="footer-links">
                 <h3>Quick Links</h3>
                 <ul>
-                    <li><a href="#">Home</a></li>
+                    <li><a href="">Home</a></li>
                     <li><a href="#">Features</a></li>
                     <li><a href="#">How It Works</a></li>
                     <li><a href="#">FAQ</a></li>
